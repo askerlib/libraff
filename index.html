@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>Document</title>
+    <title>Responsive Catalog</title>
 </head>
 
 <style>
     #popup {
-        max-height: 80vh;
+        max-height: 85vh;
         overflow: hidden;
     }
-
+    
     #catSec,
     #subCatSec,
     #subSubCatSec {
@@ -78,21 +78,145 @@
         transform: scale(1.1);
         background-color: #dc2626;
     }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+        #popup {
+            flex-direction: column;
+            width: 95% !important;
+            height: 90% !important;
+            max-height: 90vh;
+        }
+
+        #catSec, #subCatSec, #subSubCatSec {
+            width: 100% !important;
+            height: 33.33%;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        #subSubCatSec {
+            border-bottom: none;
+        }
+
+        #popup button {
+            right: 15px !important;
+            top: 15px !important;
+            width: 35px;
+            height: 35px;
+            font-size: 16px;
+        }
+
+        #catSec li,
+        #subCatSec li,
+        #subSubCatSec li {
+            padding: 15px 20px !important;
+            font-size: 14px;
+        }
+
+        .mobile-section-header {
+            display: block !important;
+            background: #f8f9fa;
+            padding: 10px 20px;
+            font-weight: bold;
+            color: #666;
+            border-bottom: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+    }
+
+    /* Tablet Styles */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        #popup {
+            width: 95% !important;
+            height: 80% !important;
+        }
+
+        #catSec {
+            width: 30% !important;
+        }
+
+        #subCatSec {
+            width: 30% !important;
+        }
+
+        #subSubCatSec {
+            width: 40% !important;
+        }
+
+        #catSec li,
+        #subCatSec li,
+        #subSubCatSec li {
+            padding: 12px 15px !important;
+            font-size: 14px;
+        }
+    }
+
+    /* Large Screen Styles */
+    @media (min-width: 1025px) {
+        #popup {
+            width: 90%;
+            max-width: 1200px;
+            height: 70%;
+        }
+    }
+
+    .mobile-section-header {
+        display: none;
+    }
+
+    /* Touch-friendly hover states for mobile */
+    @media (hover: none) and (pointer: coarse) {
+        #catSec li:hover,
+        #subCatSec li:hover,
+        #subSubCatSec li:hover {
+            transform: none;
+            background-color: #F5F5F7 !important;
+            color: red !important;
+        }
+    }
+
+    /* Better text handling for long category names */
+    @media (max-width: 768px) {
+        #catSec li,
+        #subCatSec li,
+        #subSubCatSec li {
+            white-space: normal !important;
+            line-height: 1.4;
+            min-height: 50px;
+            display: flex !important;
+            align-items: center;
+        }
+    }
 </style>
 
 <body>
-    <nav class="flex justify-between container mx-auto p-4  ">
+    <nav class="flex justify-between container mx-auto p-4">
         <button id="btn" onclick="handlepopup(true)"
-            class="p-[10px_30px] border rounded-[15px] bg-[red] text-white cursor-pointer ">Katalog</button>
+            class="p-[10px_30px] border rounded-[15px] bg-[red] text-white cursor-pointer hover:bg-red-700 transition-colors">
+            Katalog
+        </button>
     </nav>
+    
     <main>
         <div id="outset" class="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50 hidden">
-            <div id="popup" class="bg-white flex rounded-lg shadow-lg w-[90%] h-[70%] ">
-                <ul id="catSec" class="w-[25%] flex flex-col py-[20px] "></ul>
+            <div id="popup" class="bg-white flex rounded-lg shadow-lg relative">
+                
+                <!-- Mobile Section Headers (hidden on desktop) -->
+                <div class="mobile-section-header">Kategoriyalar</div>
+                <ul id="catSec" class="w-[25%] flex flex-col py-[20px]"></ul>
+                
+                <div class="mobile-section-header">Alt Kategoriyalar</div>
                 <ul id="subCatSec" class="w-[25%] bg-[#F5F5F7] flex flex-col py-[20px]"></ul>
-                <ul id="subSubCatSec" class="w-[50%] flex flex-col py-[20px] "></ul>
+                
+                <div class="mobile-section-header">Məhsullar</div>
+                <ul id="subSubCatSec" class="w-[50%] flex flex-col py-[20px]"></ul>
+                
                 <button onclick="handlepopup(false)"
-                    class="absolute cursor-pointer right-[6%] top-[16%] p-[15px_20px] rounded-full bg-[red] text-white">X</button>
+                    class="absolute cursor-pointer right-[6%] top-[16%] p-[15px_20px] rounded-full bg-[red] text-white z-20">
+                    ×
+                </button>
             </div>
         </div>
     </main>
