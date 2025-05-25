@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Document</title>
+</head>
+
+<style>
+    #popup {
+        max-height: 80vh;
+        overflow: hidden;
+    }
+
+    #catSec,
+    #subCatSec,
+    #subSubCatSec {
+        overflow-y: auto;
+        max-height: 100%;
+    }
+
+    #catSec::-webkit-scrollbar,
+    #subCatSec::-webkit-scrollbar,
+    #subSubCatSec::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #catSec::-webkit-scrollbar-track,
+    #subCatSec::-webkit-scrollbar-track,
+    #subSubCatSec::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    #catSec::-webkit-scrollbar-thumb,
+    #subCatSec::-webkit-scrollbar-thumb,
+    #subSubCatSec::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+
+    #catSec::-webkit-scrollbar-thumb:hover,
+    #subCatSec::-webkit-scrollbar-thumb:hover,
+    #subSubCatSec::-webkit-scrollbar-thumb:hover {
+        background: #a1a1a1;
+    }
+
+    #catSec li,
+    #subCatSec li,
+    #subSubCatSec li {
+        word-wrap: break-word;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: all 0.2s ease;
+    }
+
+    #catSec li:hover,
+    #subCatSec li:hover,
+    #subSubCatSec li:hover {
+        transform: translateX(5px);
+    }
+
+    #popup button {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        transition: all 0.2s ease;
+    }
+
+    #popup button:hover {
+        transform: scale(1.1);
+        background-color: #dc2626;
+    }
+</style>
+
+<body>
+    <nav class="flex justify-between container mx-auto p-4  ">
+        <button id="btn" onclick="handlepopup(true)"
+            class="p-[10px_30px] border rounded-[15px] bg-[red] text-white cursor-pointer ">Katalog</button>
+    </nav>
+    <main>
+        <div id="outset" class="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div id="popup" class="bg-white flex rounded-lg shadow-lg w-[90%] h-[70%] ">
+                <ul id="catSec" class="w-[25%] flex flex-col py-[20px] "></ul>
+                <ul id="subCatSec" class="w-[25%] bg-[#F5F5F7] flex flex-col py-[20px]"></ul>
+                <ul id="subSubCatSec" class="w-[50%] flex flex-col py-[20px] "></ul>
+                <button onclick="handlepopup(false)"
+                    class="absolute cursor-pointer right-[6%] top-[16%] p-[15px_20px] rounded-full bg-[red] text-white">X</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+
+        const catData = [
+            {
+                name: 'Kitab',
+                subCateg: [
+                    {
+                        name: 'Bədii ədəbiyyat',
+                        subCateg: [
+                            'Antologiya',
+                            'Bioqrafiya',
+                            'avtobioqrafiya & Xatirə',
+                            'DetektivElmi-fantastika & FantaziyaFəlsəfə',
+                            'Hekayələr & Oçerklər',
+                            'Kino və teatr',
+                            'Klassik poemalar',
+                            'Klassiklər',
+                            'Komiks ',
+                            'Macəra',
+                            'Mifologiya',
+                            'Nağıllar',
+                            'Poemalar',
+                            'Psixologiya',
+                            'Romanlar & Novellalar',
+                            'Satira',
+                            'Tarix, hüquq & Siyasi',
+                            'Tarixi roman',
+                            'Triller, mistika & Qorxu',
+                            'Təhsil, mənbə & Dil']
+                    },
+                    {
+                        name: 'Qeyri-bədii ədəbiyyat',
+                        subCateg: [
+                            'Ailə',
+                            'Akademik',
+                            'Aşpazlıq',
+                            'Astronomiya',
+                            'Bağbanlıq',
+                            'Bioqrafiya, avtobioqrafiya & Xatirə',
+                            'Biznes & İqtisadiyyat',
+                            'Detektiv',
+                            'Dini',
+                            'Dəb',
+                            'Elm',
+                            'Ensiklopediyalar & Atlaslar',
+                            'Ezoterika',
+                            'Fəaliyyətlər',
+                            'Fəlsəfə',
+                            'Hekayələr & Esselər',
+                            'Heyvanlar',
+                            'Jurnallar & Qəzetlər',
+                            'Kino və teatr',
+                            'Klassiklər',
+                            'Komiks',
+                            'Kompüter elmləri',
+                            'Mifologiya',
+                            'Musiqi',
+                            'Poemalar',
+                            'Psixologiya',
+                            'Publisistika',
+                            'Qeyri-bədii',
+                            'Regional maraqlar',
+                            'Romanlar & Novellalar',
+                            'Sağlamlıq, tibbi & İdman',
+                            'Sitatlar & Aforizmlər',
+                            'Sosiologiya',
+                            'Sənət, arxitektura, dizayn & Fotoqrafiya',
+                            'Şəxsi inkişaf',
+                            'Səyahət & Məkanlar',
+                            'Tarix, hüquq & Siyasi',
+                            'Tarixi roman',
+                            'Təhsil, mənbə & Dil',
+                            'Xəritələr']
+                    },
+                    {
+                        name: 'Bədii uşaq ədəbiyyatı',
+                        subCateg: [
+                            '3D Kitab',
+                            'Detektiv',
+                            'Elmi-fantastika & Fantaziya',
+                            'Hekayələr & Oçerklər',
+                            'Heyvanlar',
+                            'Klassik poemalar',
+                            'Klassiklər',
+                            'Komiks',
+                            'Macəra',
+                            'Nağıllar',
+                            'Oyuncaq kitablar',
+                            'Poemalar',
+                            'Romanlar & Novellalar',
+                            'Satira',
+                            'Səsli kitab',
+                            'Tarixi roman',
+                            'Triller, mistika & Qorxu',
+                            'Təhsil, mənbə & Dil'
+                        ]
+                    },
+                    {
+                        name: 'Qeyri-bədii uşaq ədəbiyyatı',
+                        subCateg: [
+                            '3D Kitab',
+                            'Ailə',
+                            'Aşpazlıq',
+                            'Astronomiya',
+                            'Bioqrafiya, avtobioqrafiya & Xatirə',
+                            'Biznes & İqtisadiyyat',
+                            'Dini',
+                            'Dəb',
+                            'Elm',
+                            'Ensiklopediyalar & Atlaslar',
+                            'Fəaliyyətlər',
+                            'Fəlsəfə',
+                            'Heyvanlar',
+                            'Jurnallar & Qəzetlər',
+                            'Kino və teatr',
+                            'Klassiklər',
+                            'Komiks',
+                            'Kompüter elmləri',
+                            'Mifologiya',
+                            'Musiqi',
+                            'Nağıllar',
+                            'Oyuncaq ',
+                            'Psixologiya',
+                            'Qeyri-bədii',
+                            'Sağlamlıq, tibbi & İdman',
+                            'Sitatlar & Aforizmlər',
+                            'Sənət, arxitektura, dizayn & Fotoqrafiya',
+                            'Səsli kitab',
+                            'Şəxsi inkişaf',
+                            'Səyahət & Məkanlar',
+                            'Tarix, hüquq & Siyasi',
+                            'Təhsil, mənbə & Dil',
+                            'Xəritələr',
+                        ]
+                    }
+                ]
+
+            },
+            {
+                name: 'Bədii ədəbiyyat',
+                subCateg: [
+                    'Antologiya',
+                    'Bioqrafiya, avtobioqrafiya & Xatirə',
+                    'Detektiv',
+                    'Elmi-fantastika & Fantaziya',
+                    'Fəlsəfə',
+                    'Hekayələr & Oçerklər',
+                    'Kino və teatr',
+                    'Klassik poemalar',
+                    'Klassiklər',
+                    'Komiks',
+                    'Macəra',
+                    'Mifologiya',
+                    'Nağıllar',
+                    'Poemalar',
+                    'Psixologiya',
+                    'Romanlar & Novellalar',
+                    'Satira',
+                    'Tarix, hüquq & Siyasi',
+                    'Tarixi roman',
+                    'Triller, mistika & Qorxu',
+                    'Təhsil, mənbə & Dil',
+                ]
+            },
+            {
+                name: 'Qeyri-bədii ədəbiyyat',
+                subCateg: [
+                    'Ailə',
+                    'Akademik',
+                    'Aşpazlıq',
+                    'Astronomiya',
+                    'Bağbanlıq',
+                    'Bioqrafiya, avtobioqrafiya & Xatirə',
+                    'Biznes & İqtisadiyyat',
+                    'Detektiv',
+                    'Dini',
+                    'Dəb',
+                    'Elm',
+                    'Ensiklopediyalar & Atlaslar',
+                    'Ezoterika',
+                    'Fəaliyyətlər',
+                    'Fəlsəfə',
+                    'Hekayələr & Esselər',
+                    'Heyvanlar',
+                    'Jurnallar & Qəzetlər',
+                    'Kino və teatr',
+                    'Klassiklər',
+                    'Komiks',
+                    'Kompüter elmləri',
+                    'Mifologiya',
+                    'Musiqi',
+                    'Poemalar',
+                    'Psixologiya',
+                    'Publisistika',
+                    'Qeyri-bədii',
+                    'Regional maraqlar',
+                    'Romanlar & Novellalar',
+                    'Sağlamlıq, tibbi & İdman',
+                    'Sitatlar & Aforizmlər',
+                    'Sosiologiya',
+                    'Sənət, arxitektura, dizayn & Fotoqrafiya',
+                    'Şəxsi inkişaf',
+                    'Səyahət & Məkanlar',
+                    'Tarix, hüquq & Siyasi',
+                    'Tarixi roman',
+                    'Təhsil, mənbə & Dil',
+                    'Xəritələr'
+                ]
+            },
+            {
+                name: 'Elektronika & Aksessuar',
+                subCateg: [
+                    {
+                        name: 'Çanta & Çamadanlar',
+                        subCateg: [
+                            'Bel çantası',
+                            'Biznes çantası',
+                            'Çiyin çantası',
+                            'Çoxfunksiyalı çanta',
+                            'Etiket',
+                            'Fotoaparat çantası',
+                            'İstirahət & İdman Çantaları',
+                            'Noutbuk üzlük & çantaları',
+                            'Plastik çamadanlar',
+                            'Pulqabı',
+                            'Şəxsi gigiyena çantası',
+                            'Təkərli çamadan']
+                    },
+                    {
+                        name: 'Multimedia',
+                        subCateg: [
+                            'CD'
+                        ]
+                    },
+                    {
+                        name: 'Rəqəmsal cihazlar',
+                        subCateg: [
+                            'Ağıllı saat & Fitnes bələdçi',
+                            'Kamera & Media qurğu alətləri',
+                            'Masaüstü lampa'
+
+                        ]
+                    },
+                    {
+                        name: 'Səyahət aksessuarları',
+                        subCateg: [
+                            'Boyun yastığı',
+                            'Çamadan qıfılı',
+                            'Çətir',
+                            'Maska',
+                            'Su qabı & Saxlancları',
+                            'Səyahət corabları',
+                            'Səyahət dəsti',
+                            'Xətkeş'
+
+                        ]
+                    },
+                    {
+                        name: 'Telefon & Kompüter aksessuarları',
+                        subCateg: [
+                            'Adapterlər & Çeviricilər',
+                            'Enerji saxlayıcılar & Batareyalar',
+                            'Enerji toplama cihazı & Kabellər',
+                            'Fleş disk & Yaddaş kartı',
+                            'Klaviatura & Coystiklər',
+                            'Monopodlar & Tripodlar',
+                            'Qulaqlıq & Akustika',
+                            'Smartfon üzlükləri',
+                            'Tutucular & Çexol',
+                        ]
+                    }
+                ]
+            },
+            {
+                name: 'Oyuncaqlar & Oyunlar',
+                subCateg: [
+                    {
+                        name: 'İdman & Açıq hava oyunları',
+                        subCateg: [
+                            'Atıcılar & Köpük oyunu',
+                            'Hədəf',
+                            'Skuter & Aksesuarları',
+                            'Tenis & Badminton',
+                        ]
+                    },
+                    {
+                        name: 'Öyrədici oyun & Oyuncaqlar',
+                        subCateg: [
+                            '3D Model',
+                            'Avtomobillər',
+                            'İlk oyuncaqlar',
+                            'İnşaat oyuncaqları',
+                            'Kaleydoskoplar',
+                            'Kinetik qum',
+                            'Mikroskop & Teleskop',
+                            'Musiqili oyuncaqlar',
+                            'Oyunlar & Fəaliyyətlər',
+                            'Rubik kubu',
+                            'Slaym & Yumşaq növ'
+                        ]
+                    },
+                    {
+                        name: 'Oyuncaq modelləri & Aksessuarları',
+                        subCateg: [
+                            'Doldurulmuş oyuncaqlar',
+                            'Hərəkətli oyuncaqlar',
+                            'Maşınlar',
+                            'Yumşaq oyuncaqlar'
+                        ]
+                    },
+                    {
+                        name: 'Pazllar',
+                        subCateg: [
+                            'Puzzle & Aksesuarlar'
+                        ]
+                    },
+                    {
+                        name: 'Zəka & Ənənəvi oyunlar',
+                        subCateg: [
+                            'Masaüstü oyunlar',
+                            'Məktəbəqədər oyunlar',
+                            'Oyun kartları',
+                            'Zəka oyunları',
+                        ]
+                    }
+                ]
+            },
+            {
+                name: 'Dəftərxana',
+                subCateg: [
+                    {
+                        name: 'Kağız ləvazimatları',
+                        subCateg: [
+                            'Açıqçalar',
+                            'Eskiz dəftəri',
+                            'Gündəlik & Jurnal',
+                            'Kağız ləvazimatları',
+                            'Qeyd dəftəri',
+                            'Qeyd kağızı',
+                            'Rəsmçəkmə altlıqları',
+                            'Təqvim',
+                            'Zərflər',
+                        ]
+                    },
+                    {
+                        name: 'Məktəb & Ofis',
+                        subCateg: [
+                            'Dəlgec',
+                            'Fosforlu qələmlər',
+                            'Halqa rezinlər',
+                            'Hesablayıcı',
+                            'Hesablayıcı',
+                            'Kağız tutucu',
+                            'Karandaş qabları',
+                            'Karandaş yonan',
+                            'Kompas',
+                            'Lövhə',
+                            'Lupa',
+                            'Masa dəsti & Aksesuar tutucu',
+                            'Məktəb çantası',
+                            'Pozan',
+                            'Qayçı',
+                            'Qida çantası',
+                            'Qlobus',
+                            'Sancaq',
+                            'Stepler & Ehtiyatları',
+                            'Sənəd qovluğu & Tutacaq',
+                            'Tullantı səbətləri',
+                            'Təmizlik vasitələri',
+                            'Universal bıçaq & Ehtiyatları',
+                            'Xətkeş',
+                            'Yapışdırıcı',
+                            'Yapışqan lent qurğusu & Kəsici',
+                            'Yapışqan lentlər'
+                        ]
+                    },
+                    {
+                        name: 'Uniforma',
+                        subCateg: [
+                            'Gödəkcə',
+                            'İdman forması',
+                            'Köynək',
+                            'Qalstuk',
+                            'Qısaqol köynək',
+                            'Şalvar',
+                            'Sviter',
+                            'Ətək'
+                        ]
+                    },
+                    {
+                        name: 'Yazı & Rəsm',
+                        subCateg: [
+                            'Boyalar & Boya aksesuarları',
+                            'Flomasterlər',
+                            'Karandaş & Karandaş dəstləri',
+                            'Kətan rəsm & Aksessuarları',
+                            'Pastel qələm',
+                            'Qələm & Qələm dəstləri'
+                        ]
+                    }
+                ]
+            },
+            {
+                name: 'Hədiyyələr & Hobbi',
+                subCateg: [
+                    {
+                        name: 'Hədiyyə Kartları'
+                    },
+                    {
+                        name: 'İncəsənət & Sənətkarlıq',
+                        subCateg: [
+                            '3D qələm & 3D ip',
+                            'Boyama & Kreativlik'
+                        ]
+                    },
+                    {
+                        name: 'Pazllar',
+                        subCateg: [
+                            'Pazl & Aksesuarlar'
+                        ]
+                    },
+                    {
+                        name: 'Suvenir & Dekorasiya',
+                        subCateg: [
+                            'Açarlıq',
+                            'Bayraq',
+                            'Dekorasiya',
+                            'Foto albom & Çərçivələr',
+                            'Foto yapışqan',
+                            'Maqnit',
+                            'Milli suvenirlər',
+                            'Musiqili qutu',
+                            'Pinlər',
+                            'Qablaşdırma kağızları & Qutuları',
+                            'Qəpiklik',
+                            'Yeni il bəzəkləri',
+                            'Əlfəcin & Yapışqanlar',
+                        ]
+                    }
+                ]
+            }
+
+        ]
+
+
+        const outset = document.getElementById('outset')
+        const popup = document.getElementById('popup')
+        const catSec = document.getElementById('catSec')
+        const subCatSec = document.getElementById('subCatSec')
+        const subSubCatSec = document.getElementById('subSubCatSec')
+
+        function handlepopup(status) {
+            outset.style.display = status ? 'flex' : 'none'
+        }
+
+        outset.addEventListener('click', (e) => {
+            if (!popup.contains(e.target)) {
+                outset.style.display = 'none'
+            }
+        })
+
+        function printCateg() {
+            catSec.innerHTML = ''
+            catData.forEach(item => catSec.innerHTML += `<li onmouseover="printSub('${item.name}')" class='cursor-pointer flex justify-between items-center hover:text-[red] hover:bg-[#F5F5F7] p-[10px_20px]'> ${item.name} <span>❯</span> </li>`)
+        }
+
+        printCateg()
+
+
+        function printSub(sub) {
+            subCatSec.innerHTML = ''
+            subSubCatSec.innerHTML = ''
+
+            const category = catData.find(item => item.name === sub)
+            if (!category) return
+
+            category.subCateg.forEach(item => {
+                if (typeof item === 'object' && item.name) {
+                    const hasSubCateg = item.subCateg && item.subCateg.length > 0
+                    const arrow = hasSubCateg ? '<span>❯</span>' : ''
+                    const mouseOverEvent = hasSubCateg ? `onmouseover="printSubSub('${sub}', '${item.name}')"` : ''
+
+                    subCatSec.innerHTML += `<li ${mouseOverEvent} class='cursor-pointer flex justify-between items-center hover:text-[red] hover:bg-[#F5F5F7] p-[10px_20px]'> ${item.name} ${arrow} </li>`
+                } else {
+                    subCatSec.innerHTML += `<li class='cursor-pointer flex justify-between items-center hover:text-[red] hover:bg-[#F5F5F7] p-[20px]'> ${item} </li>`
+                }
+            })
+        }
+
+        function printSubSub(sub, subSub) {
+            subSubCatSec.innerHTML = ''
+
+            const category = catData.find(item => item.name === sub)
+            if (!category) return
+
+            const subCategory = category.subCateg.find(item => item.name === subSub)
+            if (!subCategory || !subCategory.subCateg) return
+
+            subCategory.subCateg.forEach(item => {
+                subSubCatSec.innerHTML += `<li class='cursor-pointer flex justify-between items-center hover:text-[red] hover:bg-[#F5F5F7] p-[20px_20px]'> ${item} </li>`
+            })
+        }
+    </script>
+</body>
+
+</html>
